@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Module>
+  <ModulePrefs title="School Chat" height="650" />
+  <Content type="html"><![CDATA[
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <!-- CSS via jsDelivr CDN -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/USERNAME/REPO_NAME@main/chat.css">
+  
+  <style>
+    body {
+      margin: 0;
+      padding: 10px;
+      background: transparent;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Chat Container -->
+  <div id="school-chat-container"></div>
+
+  <!-- JS via jsDelivr CDN -->
+  <script src="https://cdn.jsdelivr.net/gh/USERNAME/REPO_NAME@main/chat.js"></script>
+  
+  <script>
+    // IMPORTANT: Replace with your Apps Script URL
+    SchoolChat.setApiUrl('https://script.google.com/macros/s/AKfycbztNxlj_LViNsErpRkkzM5oLVeHvkqCB1PPBkjxh9HQsdA836fYx_L28n3wZvkRY59g/exec');
+    
+    // Initialize chat
+    SchoolChat.init('school-chat-container');
+  </script>
+
+</body>
+</html>
+  ]]></Content>
+</Module>
