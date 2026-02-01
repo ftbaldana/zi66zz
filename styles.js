@@ -291,6 +291,12 @@ const SchoolChat = (function() {
         if (data.messages.length > 0) {
           renderMessages(data.messages);
           // Save last message timestamp
+          // Filter out already displayed messages
+const existingIds = new Set(
+  [...elements.messagesContainer.querySelectorAll('.chat-message')]
+    .map(el => el.dataset.timestamp)
+);
+messages = data.messages.filter(m => !existingIds.has(String(m.timestamp)));
           state.lastTimestamp = data.messages[data.messages.length - 1].timestamp;
         }
       }
@@ -331,6 +337,7 @@ const SchoolChat = (function() {
 
       const messageEl = document.createElement('div');
       messageEl.className = `chat-message ${isOwn ? 'own' : ''}`;
+messageEl.dataset.timestamp = msg.timestamp;
       messageEl.innerHTML = `
         <div class="message-header">
           <span class="message-author">${escapeHtml(msg.username)}</span>
