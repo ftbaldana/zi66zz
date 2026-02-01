@@ -25,7 +25,8 @@ const SchoolChat = (function() {
     lastTimestamp: 0,
     pollTimer: null,
     isConnected: false,
-    displayedTimestamps: new Set() // Track displayed messages
+    displayedTimestamps: new Set(),
+    sessionStart: 0 // Track when user joined
   };
 
   // ==========================================
@@ -186,6 +187,9 @@ const SchoolChat = (function() {
     }
 
     state.username = username;
+    state.sessionStart = Date.now(); // Mark session start time
+    state.displayedTimestamps.clear();
+    state.lastTimestamp = 0;
     localStorage.setItem('chatUsername', username);
     
     showChatScreen();
@@ -224,7 +228,7 @@ const SchoolChat = (function() {
     const newRoom = elements.roomSelect.value;
     state.currentRoom = newRoom;
     state.lastTimestamp = 0;
-    state.displayedTimestamps.clear(); // Clear displayed messages for new room
+    state.displayedTimestamps.clear();
     elements.roomName.textContent = newRoom;
     
     // Clear messages
@@ -242,8 +246,17 @@ const SchoolChat = (function() {
     stopPolling();
     state.username = '';
     state.lastTimestamp = 0;
+    state.sessionStart = 0;
     state.displayedTimestamps.clear();
     localStorage.removeItem('chatUsername');
+    
+    // Clear messages container
+    elements.messagesContainer.innerHTML = `
+      <div class="chat-welcome">
+        <p>👋 Welcome to the chat!</p>
+        <p class="chat-rules">Be respectful and follow the rules.</p>
+      </div>
+    `;
     
     elements.loginScreen.style.display = 'flex';
     elements.mainScreen.style.display = 'none';
@@ -258,6 +271,14 @@ const SchoolChat = (function() {
     elements.mainScreen.style.display = 'flex';
     elements.userBadge.textContent = state.username;
     elements.messageInput.focus();
+    
+    // Clear welcome message for fresh start
+    elements.messagesContainer.innerHTML = `
+      <div class="chat-welcome">
+        <p>👋 Welcome, ${escapeHtml(state.username)}!</p>
+        <p class="chat-rules">Be respectful and follow the rules.</p>
+      </div>
+    `;
   }
 
   // ==========================================
@@ -339,6 +360,7 @@ const SchoolChat = (function() {
   // ==========================================
   function renderMessages(messages) {
     messages.forEach(msg => {
+      // Check if this message belongs to current user BY USERNAME
       const isOwn = msg.username === state.username;
       const time = new Date(msg.timestamp).toLocaleTimeString('en-US', {
         hour: '2-digit',
