@@ -24,7 +24,8 @@ const SchoolChat = (function() {
     currentRoom: 'general',
     lastTimestamp: 0,
     pollTimer: null,
-    isConnected: false
+    isConnected: false,
+    displayedTimestamps: new Set() // Track displayed messages
   };
 
   // ==========================================
@@ -203,8 +204,8 @@ const SchoolChat = (function() {
 
     sendMessage(message)
       .then(() => {
-        // Success - immediately refresh messages
-        fetchMessages();
+        // Success - wait a bit then refresh messages
+        setTimeout(fetchMessages, 500);
       })
       .catch((error) => {
         console.error('Failed to send message:', error);
@@ -223,6 +224,7 @@ const SchoolChat = (function() {
     const newRoom = elements.roomSelect.value;
     state.currentRoom = newRoom;
     state.lastTimestamp = 0;
+    state.displayedTimestamps.clear(); // Clear displayed messages for new room
     elements.roomName.textContent = newRoom;
     
     // Clear messages
@@ -240,6 +242,7 @@ const SchoolChat = (function() {
     stopPolling();
     state.username = '';
     state.lastTimestamp = 0;
+    state.displayedTimestamps.clear();
     localStorage.removeItem('chatUsername');
     
     elements.loginScreen.style.display = 'flex';
@@ -261,7 +264,7 @@ const SchoolChat = (function() {
   // API CALLS
   // ==========================================
   async function sendMessage(message) {
-    const response = await fetch(CONFIG.API_URL, {
+    await fetch(CONFIG.API_URL, {
       method: 'POST',
       mode: 'no-cors', // For CORS bypass
       headers: {
@@ -289,15 +292,22 @@ const SchoolChat = (function() {
         updateConnectionStatus(true);
         
         if (data.messages.length > 0) {
-          renderMessages(data.messages);
-          // Save last message timestamp
           // Filter out already displayed messages
-const existingIds = new Set(
-  [...elements.messagesContainer.querySelectorAll('.chat-message')]
-    .map(el => el.dataset.timestamp)
-);
-messages = data.messages.filter(m => !existingIds.has(String(m.timestamp)));
-          state.lastTimestamp = data.messages[data.messages.length - 1].timestamp;
+          const newMessages = data.messages.filter(msg => {
+            return !state.displayedTimestamps.has(msg.timestamp);
+          });
+          
+          if (newMessages.length > 0) {
+            renderMessages(newMessages);
+            
+            // Mark these messages as displayed
+            newMessages.forEach(msg => {
+              state.displayedTimestamps.add(msg.timestamp);
+            });
+            
+            // Update last timestamp
+            state.lastTimestamp = data.messages[data.messages.length - 1].timestamp;
+          }
         }
       }
     } catch (error) {
@@ -337,7 +347,7 @@ messages = data.messages.filter(m => !existingIds.has(String(m.timestamp)));
 
       const messageEl = document.createElement('div');
       messageEl.className = `chat-message ${isOwn ? 'own' : ''}`;
-messageEl.dataset.timestamp = msg.timestamp;
+      messageEl.dataset.timestamp = msg.timestamp;
       messageEl.innerHTML = `
         <div class="message-header">
           <span class="message-author">${escapeHtml(msg.username)}</span>
