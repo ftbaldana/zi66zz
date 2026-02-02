@@ -21,10 +21,10 @@
 </head>
 <body>
   <div id="school-chat-container"></div>
-  <script src="https://cdn.jsdelivr.net/gh/ftbaldana/zi66zz@main/style/styles.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/ftbaldana/zi66zz@main/css/styles.js"></script>
   
   <script>
-    SchoolChat.setApiUrl('https://script.google.com/macros/s/AKfycbxsfWdfMWprjkiH8_w1pR5TkKknmyEc2WWcbzkFX6vRIvNiyIjHZhj5-02ibnFh2SHO/exec');
+    SchoolChat.setApiUrl('https://script.google.com/macros/s/AKfycbztNxlj_LViNsErpRkkzM5oLVeHvkqCB1PPBkjxh9HQsdA836fYx_L28n3wZvkRY59g/exec');
     SchoolChat.init('school-chat-container');
   </script>
 
@@ -220,7 +220,7 @@
 <div id="ad-container" aria-hidden="true" role="dialog" aria-label="Advertisement">
   <iframe
     id="ad-iframe"
-    src="https://script.google.com/macros/s/AKfycbyLuArnqQWhE6SmUPiOLVCib2W7b_xMQPKMd20jB7ySrD1so4x7WIv_vwWh3LLG4Npw/exec"
+    src="https://script.google.com/macros/s/AKfycbxrLrg90oLqBuPqraXi0PXX0wrrqLx0l6A5PvGtmWjjjZ0hBSaMVXn2jcW8-MAhjCZQ/exec"
     width="360px"
     height="310px"
     scrolling="no"
