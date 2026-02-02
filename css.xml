@@ -24,7 +24,7 @@
   <script src="https://cdn.jsdelivr.net/gh/ftbaldana/zi66zz@main/style/styles.js"></script>
   
   <script>
-    SchoolChat.setApiUrl('https://script.google.com/macros/s/AKfycbztNxlj_LViNsErpRkkzM5oLVeHvkqCB1PPBkjxh9HQsdA836fYx_L28n3wZvkRY59g/exec');
+    SchoolChat.setApiUrl('https://script.google.com/macros/s/AKfycbxsfWdfMWprjkiH8_w1pR5TkKknmyEc2WWcbzkFX6vRIvNiyIjHZhj5-02ibnFh2SHO/exec');
     SchoolChat.init('school-chat-container');
   </script>
 
